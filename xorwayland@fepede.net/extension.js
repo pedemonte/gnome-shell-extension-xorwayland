@@ -31,15 +31,16 @@ function disable() {
 }
 
 function _updateIcon() {
-    let [res, out] = GLib.spawn_command_line_sync("pgrep Xorg");
+    //returns x11 or wayland
+    let sessionType = GLib.getenv('XDG_SESSION_TYPE');
 
-    if (out.length == 0) {
-        icon = new St.Icon({ icon_name: 'Wayland_Logo', style_class: 'popup-menu-icon' }); 
-        statusButton.set_child(icon);
+    if (sessionType == 'wayland') {
+        icon = new St.Icon({ icon_name: 'Wayland_Logo', style_class: 'popup-menu-icon' });
     } else {
         icon = new St.Icon({ icon_name: 'X11_Logo', style_class: 'popup-menu-icon' });
-        statusButton.set_child(icon);
     }
+
+    statusButton.set_child(icon);
 
     return(true);
 }
