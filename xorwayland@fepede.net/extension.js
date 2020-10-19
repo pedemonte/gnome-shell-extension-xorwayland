@@ -1,4 +1,5 @@
 const GLib = imports.gi.GLib;
+const Gio = imports.gi.Gio;
 const Gtk = imports.gi.Gtk;
 const Main = imports.ui.main;
 const Me = imports.misc.extensionUtils.getCurrentExtension();
@@ -16,8 +17,6 @@ function init() {
 
     _updateIcon();
 
-    Gtk.IconTheme.get_default().append_search_path(Me.dir.get_child('icons').get_path());
-
     layout = new St.BoxLayout();
     layout.add_actor(statusButton);
 }
@@ -30,14 +29,24 @@ function disable() {
     Main.panel._rightBox.remove_child(layout);
 }
 
+function _getIcon(icon_name) {
+    // Check if icon is available in theme
+    // get_default can be null (on Wayland)
+    if (Gtk.IconTheme.get_default() && Gtk.IconTheme.get_default().has_icon(icon_name)) {
+        return Gio.icon_new_for_string(icon_name);
+    }
+    // Icon not available in theme
+    return Gio.icon_new_for_string(Me.dir.get_child('icons').get_path() + "/" + icon_name + ".svg");
+}
+
 function _updateIcon() {
     //returns x11 or wayland
     let sessionType = GLib.getenv('XDG_SESSION_TYPE');
 
     if (sessionType == 'wayland') {
-        icon = new St.Icon({ icon_name: 'Wayland_Logo', style_class: 'popup-menu-icon' });
+        icon = new St.Icon({gicon: _getIcon('Wayland_Logo'), style_class: 'popup-menu-icon'});
     } else {
-        icon = new St.Icon({ icon_name: 'X11_Logo', style_class: 'popup-menu-icon' });
+        icon = new St.Icon({gicon: _getIcon('X11_Logo'), style_class: 'popup-menu-icon'});
     }
 
     statusButton.set_child(icon);
