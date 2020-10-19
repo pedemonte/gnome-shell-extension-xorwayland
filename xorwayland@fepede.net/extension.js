@@ -10,8 +10,8 @@ let layout;
 function init() {
     statusButton = new St.Bin({
         style_class: 'panel-button',
-        x_fill: false,
-        y_fill: false,
+        x_expand: false,
+        y_expand: false,
     });
 
     _updateIcon();
