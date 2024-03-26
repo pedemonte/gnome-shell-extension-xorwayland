@@ -1,1 +1,9 @@
-{"shell-version": ["3.20", "3.22", "3.24", "40", "41", "42"], "uuid": "xorwayland@fepede.net", "name": "XorgOrWayland", "description": "Shows an icon telling if Gnome is runing under Xorg or Wayland"}
+{
+    "shell-version": [
+        "45",
+        "46"
+    ],
+    "uuid": "xorwayland@fepede.net",
+    "name": "XorgOrWayland",
+    "description": "Shows an icon telling if Gnome is runing under Xorg or Wayland"
+}
